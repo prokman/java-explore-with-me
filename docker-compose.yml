@@ -1,16 +1,16 @@
 services:
-#  stats-server:
-#    build: stats/stats-server
-#    image: stats-server-image
-#    container_name: stats-server
-#    ports:
-#      - "9090:9090"
-#    depends_on:
-#      - stats-db
-#    environment:
-#      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
-#      - SPRING_DATASOURCE_USERNAME=statDb
-#      - SPRING_DATASOURCE_PASSWORD=statDb
+  stats-server:
+    build: stats/stats-server
+    image: stats-server-image
+    container_name: stats-server
+    ports:
+      - "9090:9090"
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
+      - SPRING_DATASOURCE_USERNAME=statDb
+      - SPRING_DATASOURCE_PASSWORD=statDb
 
   stats-db:
     image: postgres:16.1
