@@ -11,7 +11,6 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
       - SPRING_DATASOURCE_USERNAME=statDb
       - SPRING_DATASOURCE_PASSWORD=statDb
-
   stats-db:
     image: postgres:16.1
     container_name: postgres-ewm-stats-db
@@ -35,4 +34,4 @@ services:
       - "8080:8080"
 
   ewm-db:
-  image: postgres:16.1
+    image: postgres:16.1
