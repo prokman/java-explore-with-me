@@ -6,24 +6,29 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import statdto.StatDtoResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
 public interface HitRepository extends JpaRepository<Hit, Long> {
 
     @Query(
-            value = "SELECT h.APP as app, h.URI as uri, COUNT(DISTINCT IP) AS hits FROM hits h" +
-            " WHERE hitDateTime BETWEEN :start AND :end" +
-            " AND LOWER(hit.uri) IN (:uris)" +
-            " GROUP BY app, uri", nativeQuery = true
+            "SELECT new statdto.StatDtoResponse(h.app, h.uri, COUNT(DISTINCT h.ip) AS hits)" +
+                    " FROM Hit h" +
+                    " WHERE h.hitDateTime BETWEEN :start AND :end" +
+                    " AND (LOWER(h.uri) IN (:uris) OR :uris IS NULL)" +
+                    " GROUP BY h.app, h.uri" +
+                    " ORDER BY hits DESC"
     )
-    List<StatDtoResponse> getHitListUniqueIp(String start, String end, List<String> uris);
+    List<StatDtoResponse> getHitListUniqueIp(LocalDateTime start, LocalDateTime end, List<String> uris);
 
     @Query(
-            value = "SELECT h.APP as app, h.URI as uri, COUNT(IP) AS hits FROM hits h" +
-                    " WHERE hitDateTime BETWEEN :start AND :end" +
-                    " AND LOWER(hit.uri) IN (:uris)" +
-                    " GROUP BY app, uri", nativeQuery = true
+            "SELECT new statdto.StatDtoResponse(h.app, h.uri, COUNT(h.ip) AS hits)" +
+                    " FROM Hit h" +
+                    " WHERE h.hitDateTime BETWEEN :start AND :end" +
+                    " AND (LOWER(h.uri) IN (:uris) OR :uris IS NULL)" +
+                    " GROUP BY h.app, h.uri" +
+                    " ORDER BY hits DESC"
     )
-    List<StatDtoResponse> getHitListTotal(String start, String end, List<String> uris);
+    List<StatDtoResponse> getHitListTotal(LocalDateTime start, LocalDateTime end, List<String> uris);
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import statdto.StatDtoRequest;
 import statdto.StatDtoResponse;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -28,8 +29,9 @@ public class StatsController {
     @ResponseStatus(HttpStatus.OK)
     public List<StatDtoResponse> getStats(@RequestParam(required = true) String start,
                                           @RequestParam(required = true) String end,
-                                          @RequestParam(required = true) List<String> uris,
+                                          @RequestParam(required = false) List<String> uris,
                                           @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-        return statService.getStats(start, end, uris, unique);
+
+    return statService.getStats(start, end, uris, unique);
     }
 }

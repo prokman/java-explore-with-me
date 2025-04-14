@@ -22,7 +22,7 @@ public class Hit {
     @Column(name = "APP", nullable = false)
     private String app;
 
-    @Column(name = "URI", nullable = false)
+    @Column(name = "URI")
     private String uri;
 
     @Column(name = "IP", nullable = false)

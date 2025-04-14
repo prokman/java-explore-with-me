@@ -9,7 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import statdto.StatDtoRequest;
 import statdto.StatDtoResponse;
 
-import java.util.ArrayList;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -27,14 +28,18 @@ public class StatServiceImpl implements StatService {
 
     @Override
     public List<StatDtoResponse> getStats(String start, String end, List<String> uris, Boolean uniqueIp) {
-        List<StatDtoResponse> dtoResponseList = new ArrayList<>();
-        uris.forEach(String::toLowerCase);
+        List<StatDtoResponse> dtoResponses;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startLdt = LocalDateTime.parse(start, formatter);
+        LocalDateTime endLdt = LocalDateTime.parse(end, formatter);
+
         if (uniqueIp) {
-            dtoResponseList = hitRepository.getHitListUniqueIp(start, end, uris);
-            return dtoResponseList;
+            dtoResponses = hitRepository.getHitListUniqueIp(startLdt, endLdt, uris);
+            return dtoResponses;
         } else {
-            dtoResponseList = hitRepository.getHitListTotal(start, end, uris);
-            return dtoResponseList;
+            dtoResponses = hitRepository.getHitListTotal(startLdt, endLdt, uris);
+            return dtoResponses;
         }
     }
 }
