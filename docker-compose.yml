@@ -1,12 +1,35 @@
 services:
   stats-server:
+    build: stats/stats-server
+    image: stats-server-image
+    container_name: stats-server
     ports:
       - "9090:9090"
-
+    depends_on:
+      - stats-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
+      - SPRING_DATASOURCE_USERNAME=statDb
+      - SPRING_DATASOURCE_PASSWORD=statDb
   stats-db:
     image: postgres:16.1
+    container_name: postgres-ewm-stats-db
+    ports:
+      - "6542:5432"
+    environment:
+      - POSTGRES_PASSWORD=statDb
+      - POSTGRES_USER=statDb
+      - POSTGRES_DB=ewm-stats
+    healthcheck:
+      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      timeout: 5s
+      interval: 5s
+      retries: 5
 
   ewm-service:
+    build: main-service
+    image: main-service-image
+    container_name: main-service
     ports:
       - "8080:8080"
 
