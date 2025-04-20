@@ -1,3 +1,4 @@
+/*
 package stat;
 
 import jakarta.validation.Valid;
@@ -37,3 +38,4 @@ public class StatsController {
         return statsClient.getStats(start, end, uris, unique);
     }
 }
+*/
