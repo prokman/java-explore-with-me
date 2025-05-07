@@ -11,6 +11,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://stats-db:5432/ewm-stats
       - SPRING_DATASOURCE_USERNAME=statDb
       - SPRING_DATASOURCE_PASSWORD=statDb
+    networks:
+      - my-network
   stats-db:
     image: postgres:16.1
     container_name: postgres-ewm-stats-db
@@ -20,6 +22,8 @@ services:
       - POSTGRES_PASSWORD=statDb
       - POSTGRES_USER=statDb
       - POSTGRES_DB=ewm-stats
+    networks:
+      - my-network
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
@@ -38,6 +42,8 @@ services:
       - SPRING_DATASOURCE_URL=jdbc:postgresql://ewm-db:5432/ewm-main
       - SPRING_DATASOURCE_USERNAME=mainDb
       - SPRING_DATASOURCE_PASSWORD=mainDb
+    networks:
+      - my-network
   ewm-db:
     image: postgres:16.1
     container_name: postgres-ewm-main-db
@@ -47,8 +53,13 @@ services:
       - POSTGRES_PASSWORD=mainDb
       - POSTGRES_USER=mainDb
       - POSTGRES_DB=ewm-main
+    networks:
+      - my-network
     healthcheck:
       test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
       timeout: 5s
       interval: 5s
       retries: 5
+networks:
+  my-network:
+    driver: bridge
