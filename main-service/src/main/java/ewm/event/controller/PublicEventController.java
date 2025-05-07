@@ -50,7 +50,8 @@ public class PublicEventController {
                                                        @RequestParam(required = false) Boolean onlyAvailable,
                                                        @RequestParam(required = false) String sort,
                                                        @RequestParam(required = false, defaultValue = "0") Integer from,
-                                                       @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                       HttpServletRequest httpServletRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime start = null;
         LocalDateTime end = null;
@@ -64,7 +65,14 @@ public class PublicEventController {
             throw new BadRequestException("дата завершения периода " + end + " раньше даты начала периода " + start);
         }
         GetPublicEventsParam param = new GetPublicEventsParam(text, categories, paid, onlyAvailable, sort, start, end);
-        return publicEventService.getAllPublicEventByParam(param, from, size);
+        List<EventFullDto> eventFullDtoList = publicEventService.getAllPublicEventByParam(param, from, size);
+
+        String app = PublicEventService.class.getPackageName();
+
+        StatDtoRequest statDtoRequest = new StatDtoRequest(app, httpServletRequest.getRequestURI(),
+                httpServletRequest.getRemoteAddr(), formatter.format(LocalDateTime.now()));
+        statsClient.addHit(statDtoRequest);
+        return eventFullDtoList;
     }
 
 

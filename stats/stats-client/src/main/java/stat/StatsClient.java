@@ -14,6 +14,7 @@ import java.util.Optional;
 @Service
 public class StatsClient {
     private static final String BASE_URL = "http://stats-server:9090";
+//    private static final String BASE_URL = "http://localhost:9090";
     private static final String API_PREFIX_HIT = "/hit";
     private static final String API_PREFIX_STATS = "/stats";
     private final RestClient restClient;
