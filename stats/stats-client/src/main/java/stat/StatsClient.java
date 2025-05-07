@@ -18,6 +18,7 @@ public class StatsClient {
     private static final String API_PREFIX_STATS = "/stats";
     private final RestClient restClient;
 
+
     public StatsClient() {
         this.restClient = RestClient.builder()
                 .baseUrl(BASE_URL)
