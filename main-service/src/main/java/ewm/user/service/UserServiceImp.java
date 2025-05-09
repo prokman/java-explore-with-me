@@ -25,20 +25,14 @@ public class UserServiceImp implements UserService {
     @Override
     public List<UserDto> getUsers(Integer from, Integer size, List<Long> ids) {
         if (ids == null || ids.isEmpty()) {
-            if (from == null) from = 0;
-            if (size == null) size = 10;
-            int pageNumber = from / size;
-            Pageable pageable = PageRequest.of(pageNumber, size);
+            Pageable pageable = getPageable(from,size);
             List<User> users = userRepository.findAll(pageable).toList();
             return users
                     .stream()
                     .map(UserMapper::userToDto)
                     .toList();
         } else {
-            if (from == null) from = 0;
-            if (size == null) size = 10;
-            int pageNumber = from / size;
-            Pageable pageable = PageRequest.of(pageNumber, size);
+            Pageable pageable = getPageable(from,size);
             List<User> users = userRepository.findUserById(ids, pageable);
             return users
                     .stream()
@@ -66,5 +60,17 @@ public class UserServiceImp implements UserService {
     @Transactional
     public void deleteUser(Long itemId) {
         userRepository.deleteById(itemId);
+    }
+
+    private Pageable getPageable(Integer from, Integer size) {
+        if (from == null) {
+            from = 0;
+        }
+        if (size == null) {
+            size = 10;
+        }
+        int pageNumber = from / size;
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return pageable;
     }
 }

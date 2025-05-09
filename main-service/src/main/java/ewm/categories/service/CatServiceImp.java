@@ -95,8 +95,6 @@ public class CatServiceImp implements CatService {
 
     @Override
     public List<CategoryDto> getCategories(Integer from, Integer size) {
-        if (from == null) from = 0;
-        if (size == null) size = 10;
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         List<Category> categoryList = catRepository.getCatByParam(pageable);

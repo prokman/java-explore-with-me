@@ -57,8 +57,6 @@ public class PublicEventServiceImp implements PublicEventService {
 
     @Override
     public List<EventFullDto> getAllPublicEventByParam(GetPublicEventsParam param, Integer from, Integer size) {
-        if (from == null) from = 0;
-        if (size == null) size = 10;
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         Page<Event> page = eventRepository.findAll(EventPublicSpecification.withFilter(param), pageable);

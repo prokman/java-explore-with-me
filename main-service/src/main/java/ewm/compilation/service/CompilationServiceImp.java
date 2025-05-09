@@ -35,7 +35,9 @@ public class CompilationServiceImp implements CompilationService {
     @Transactional
     public CompilationDto postCompilation(NewCompilationDto request) {
         Set<Event> events = new HashSet<>();
-        if (request.getPinned() == null) request.setPinned(Boolean.FALSE);
+        if (request.getPinned() == null) {
+            request.setPinned(Boolean.FALSE);
+        }
         if (request.getEvents() != null && !request.getEvents().isEmpty()) {
             events = request.getEvents()
                     .stream()
@@ -64,8 +66,12 @@ public class CompilationServiceImp implements CompilationService {
 
             Set<EventShortDto> eventShortDtoSet = publicEventService.getShrotDtoEventsSet(request.getEvents());
             compilation.setEvents(events);
-            if (request.getPinned() != null) compilation.setPinned(request.getPinned());
-            if (request.getTitle() != null && !request.getTitle().isBlank()) compilation.setTitle(request.getTitle());
+            if (request.getPinned() != null) {
+                compilation.setPinned(request.getPinned());
+            }
+            if (request.getTitle() != null && !request.getTitle().isBlank()) {
+                compilation.setTitle(request.getTitle());
+            }
             Compilation updatedCompilation = compilationRepository.save(compilation);
             compilationDto = CompilationMapper.compilationToDto(updatedCompilation, eventShortDtoSet);
             return compilationDto;
@@ -74,8 +80,12 @@ public class CompilationServiceImp implements CompilationService {
                     .stream()
                     .map(EventMapper::eventToShortDto)
                     .collect(Collectors.toSet());
-            if (request.getPinned() != null) compilation.setPinned(request.getPinned());
-            if (request.getTitle() != null && !request.getTitle().isBlank()) compilation.setTitle(request.getTitle());
+            if (request.getPinned() != null) {
+                compilation.setPinned(request.getPinned());
+            }
+            if (request.getTitle() != null && !request.getTitle().isBlank()) {
+                compilation.setTitle(request.getTitle());
+            }
             compilationDto = CompilationMapper.compilationToDto(compilation, eventShortDtoSet);
             return compilationDto;
         }
@@ -118,7 +128,6 @@ public class CompilationServiceImp implements CompilationService {
                     .collect(Collectors.toSet());
             compilationDtoList.add(CompilationMapper.compilationToDto(comp, eventShortDtoSet));
         }
-        //compilationDtoList.sort(Comparator.comparingLong(CompilationDto::getId));
         return compilationDtoList;
     }
 }

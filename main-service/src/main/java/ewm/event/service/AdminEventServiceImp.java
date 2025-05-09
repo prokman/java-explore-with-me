@@ -33,8 +33,6 @@ public class AdminEventServiceImp implements AdminEventService {
 
     @Override
     public List<EventFullDto> getAdminEvents(GetAdminEventsParam param, Integer from, Integer size) {
-        if (from == null) from = 0;
-        if (size == null) size = 10;
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         Page<Event> page = eventRepository.findAll(EventAdminSpecification.withFilter(param), pageable);
@@ -70,9 +68,13 @@ public class AdminEventServiceImp implements AdminEventService {
 
         Category category = null;
         Location location = null;
-        if (request.getCategory() != null) category = CategoryMapper
-                .dtoToCategory(catService.getCategoryById(request.getCategory()));
-        if (request.getLocation() != null) location = locationService.postLocation(request.getLocation());
+        if (request.getCategory() != null) {
+            category = CategoryMapper
+                    .dtoToCategory(catService.getCategoryById(request.getCategory()));
+        }
+        if (request.getLocation() != null) {
+            location = locationService.postLocation(request.getLocation());
+        }
 
         Event patchedEvent = updateEventFields(event, request, category, location);
         EventFullDto fullDto = EventMapper.eventToFullDto(eventRepository.save(patchedEvent));
@@ -81,15 +83,33 @@ public class AdminEventServiceImp implements AdminEventService {
     }
 
     private Event updateEventFields(Event target, UpdateEventAdminRequest source, Category category, Location location) {
-        if (source.getAnnotation() != null) target.setAnnotation(source.getAnnotation());
-        if (category != null) target.setCategory(category);
-        if (source.getDescription() != null) target.setDescription(source.getDescription());
-        if (source.getEventDate() != null) target.setEventDate(source.getEventDate());
-        if (location != null) target.setLocation(location);
-        if (source.getPaid() != null) target.setPaid(source.getPaid());
-        if (source.getParticipantLimit() != null) target.setParticipantLimit(source.getParticipantLimit());
-        if (source.getRequestModeration() != null) target.setRequestModeration(source.getRequestModeration());
-        if (source.getTitle() != null) target.setTitle(source.getTitle());
+        if (source.getAnnotation() != null) {
+            target.setAnnotation(source.getAnnotation());
+        }
+        if (category != null) {
+            target.setCategory(category);
+        }
+        if (source.getDescription() != null) {
+            target.setDescription(source.getDescription());
+        }
+        if (source.getEventDate() != null) {
+            target.setEventDate(source.getEventDate());
+        }
+        if (location != null) {
+            target.setLocation(location);
+        }
+        if (source.getPaid() != null) {
+            target.setPaid(source.getPaid());
+        }
+        if (source.getParticipantLimit() != null) {
+            target.setParticipantLimit(source.getParticipantLimit());
+        }
+        if (source.getRequestModeration() != null) {
+            target.setRequestModeration(source.getRequestModeration());
+        }
+        if (source.getTitle() != null) {
+            target.setTitle(source.getTitle());
+        }
 
         if (source.getStateAction() != null) {
             if (target.getEventState().equals(EventState.PENDING)

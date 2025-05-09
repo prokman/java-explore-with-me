@@ -54,7 +54,6 @@ public class PrivateEventController {
     @ResponseStatus(HttpStatus.OK)
     public List<RequestDto> getEventRequests(@PathVariable @NotNull @Positive Long userId,
                                              @PathVariable @NotNull @Positive Long eventId) {
-        //тут получаем парам для поиска и выдачи лист реквестов
         return eventService.getEventRequests(userId, eventId);
     }
 

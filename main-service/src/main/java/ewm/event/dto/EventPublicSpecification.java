@@ -31,8 +31,6 @@ public class EventPublicSpecification {
             }
 
             if (param.getOnlyAvailable() != null && Boolean.TRUE.equals(param.getOnlyAvailable())) {
-//                Predicate nonavailability = criteriaBuilder
-//                        .lessThan(root.get("confirmedRequests"), root.get("participantLimit"));
                 predicates.add(criteriaBuilder.lessThan(root.get("confirmedRequests"), root.get("participantLimit")));
             }
 
