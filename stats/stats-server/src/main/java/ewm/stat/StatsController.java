@@ -1,6 +1,7 @@
 package ewm.stat;
 
 
+import ewm.exceptions.BadRequestException;
 import ewm.stat.service.StatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import statdto.StatDtoRequest;
 import statdto.StatDtoResponse;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -30,7 +33,18 @@ public class StatsController {
                                           @RequestParam(required = true) String end,
                                           @RequestParam(required = false) List<String> uris,
                                           @RequestParam(required = false, defaultValue = "false") Boolean unique) {
-
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startLdt = null;
+        LocalDateTime endLdt = null;
+        if (start != null && !start.isBlank()) {
+            startLdt = LocalDateTime.parse(start, formatter);
+        }
+        if (end != null && !end.isBlank()) {
+            endLdt = LocalDateTime.parse(end, formatter);
+        }
+        if ((end != null && !end.isBlank()) && (start != null && !start.isBlank()) && endLdt.isBefore(startLdt)) {
+            throw new BadRequestException("дата завершения периода " + end + " раньше даты начала периода " + start);
+        }
     return statService.getStats(start, end, uris, unique);
     }
 }
