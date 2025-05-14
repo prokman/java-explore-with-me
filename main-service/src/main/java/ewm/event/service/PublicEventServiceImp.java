@@ -3,6 +3,7 @@ package ewm.event.service;
 import ewm.event.dto.*;
 import ewm.event.model.Event;
 import ewm.event.repository.EventRepository;
+import ewm.exceptions.BadRequestException;
 import ewm.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -57,6 +58,9 @@ public class PublicEventServiceImp implements PublicEventService {
 
     @Override
     public List<EventFullDto> getAllPublicEventByParam(GetPublicEventsParam param, Integer from, Integer size) {
+        if (size.equals(0)) {
+            throw new BadRequestException("параметр size не может быть равен 0");
+        }
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         Page<Event> page = eventRepository.findAll(EventPublicSpecification.withFilter(param), pageable);

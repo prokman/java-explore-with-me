@@ -12,7 +12,7 @@ public interface CommentService {
 
     CommentDto patchComment(@NotNull @Positive Long userId, @Positive Long comId, NewCommentDto newCommentDto);
 
-    void deleteComment(@Positive @NotNull Long commentId);
+    void deleteComment(@Positive @NotNull Long commentId, @NotNull @Positive Long userId);
 
     List<CommentDto> getComments(Integer from, Integer size, @NotNull @Positive Long eventId);
 }

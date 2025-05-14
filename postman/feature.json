@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "2314666d-4e61-4465-b5ab-c9e20bd7b0b9",
+		"_postman_id": "0eae3e58-e96e-4968-939a-b89b0dd38ed2",
 		"name": "Test Explore With Me - feature",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "40123748"
@@ -29,8 +29,10 @@
 									"        event = await api.publishEvent(event.id);\r",
 									"        \r",
 									"        const submittedUser = await api.addUser(rnd.getUser());\r",
+									"\r",
 									"        pm.request.removeQueryParams(['eventId']);\r",
 									"        pm.request.addQueryParams([`eventId=` + event.id]);\r",
+									"\r",
 									"        pm.collectionVariables.set('uid', submittedUser.id);\r",
 									"        pm.collectionVariables.set(\"commentText\", rnd.getWord(50));\r",
 									"        pm.collectionVariables.set(\"submittedUser\", submittedUser);\r",
@@ -83,12 +85,12 @@
 									"pm.test(\"Response data equal to request\", function () {    \r",
 									"    pm.expect(target).to.have.property('id');\r",
 									"    pm.expect(target).to.have.property('text');\r",
-									"    pm.expect(target).to.have.property('author');\r",
-									"    pm.expect(target).to.have.property('event');\r",
+									"    pm.expect(target).to.have.property('authorId');\r",
+									"    pm.expect(target).to.have.property('eventId');\r",
 									"    pm.expect(target).to.have.property('created');\r",
 									"    pm.expect(target.text, `\"text\" must be ` +  text).to.eql(text);\r",
-									"    pm.expect(target.author, `\"author\" must be ${submittedUser.id}`).to.eql(submittedUser.id);\r",
-									"    pm.expect(target.event,`\"event\" must be ${eventId}`).to.eql(eventId);\r",
+									"    pm.expect(target.authorId, `\"authorId\" must be ${submittedUser.id}`).to.eql(submittedUser.id);\r",
+									"    pm.expect(target.eventId,`\"eventId\" must be ${eventId}`).to.eql(eventId);\r",
 									"});"
 								],
 								"type": "text/javascript",
@@ -126,8 +128,7 @@
 							"query": [
 								{
 									"key": "eventId",
-									"value": "0",
-									"description": "(Required) id события"
+									"value": "0"
 								}
 							],
 							"variable": [
@@ -232,8 +233,8 @@
 									"pm.test(\"Response data have property\", function () {    \r",
 									"    pm.expect(target[0]).to.have.property('id');\r",
 									"    pm.expect(target[0]).to.have.property('text');\r",
-									"    pm.expect(target[0]).to.have.property('author');\r",
-									"    pm.expect(target[0]).to.have.property('event');\r",
+									"    pm.expect(target[0]).to.have.property('authorId');\r",
+									"    pm.expect(target[0]).to.have.property('eventId');\r",
 									"    pm.expect(target[0]).to.have.property('created');\r",
 									"   // pm.expect(target.text, `\"text\" must be ` +  text).to.eql(text);\r",
 									"   // pm.expect(target.author, `\"author\" must be ${submittedUser.id}`).to.eql(submittedUser.id);\r",
@@ -377,7 +378,9 @@
 									"        method: 'GET',\r",
 									"    }, (error, response) => {\r",
 									"        pm.test(\"Категория не должна быть найдена после удаления\", function () {            \r",
-									"            pm.expect(response.code).to.eql(404);           \r",
+									"            pm.expect(response.code).to.eql(200);\r",
+									"            const responseBody = response.json();\r",
+									"            pm.expect(responseBody).to.be.an('array').that.is.empty;                     \r",
 									"        });\r",
 									"    });"
 								],
@@ -510,12 +513,12 @@
 									"pm.test(\"Response data equal to request\", function () {    \r",
 									"    pm.expect(target).to.have.property('id');\r",
 									"    pm.expect(target).to.have.property('text');\r",
-									"    pm.expect(target).to.have.property('author');\r",
-									"    pm.expect(target).to.have.property('event');\r",
+									"    pm.expect(target).to.have.property('authorId');\r",
+									"    pm.expect(target).to.have.property('eventId');\r",
 									"    pm.expect(target).to.have.property('created');\r",
 									"    pm.expect(target.text, `\"text\" must be ` +  updateText).to.eql(updateText);\r",
-									"    pm.expect(target.author, `\"author\" must be ${submittedUser.id}`).to.eql(submittedUser.id);\r",
-									"    pm.expect(target.event,`\"event\" must be ${eventId}`).to.eql(eventId);\r",
+									"    pm.expect(target.authorId, `\"authorId\" must be ${submittedUser.id}`).to.eql(submittedUser.id);\r",
+									"    pm.expect(target.eventId,`\"eventId\" must be ${eventId}`).to.eql(eventId);\r",
 									"});"
 								],
 								"type": "text/javascript",

@@ -8,6 +8,7 @@ import ewm.event.model.Event;
 import ewm.event.model.EventState;
 import ewm.event.model.StateAction;
 import ewm.event.repository.EventRepository;
+import ewm.exceptions.BadRequestException;
 import ewm.exceptions.ConditionNotMeetException;
 import ewm.exceptions.NotFoundException;
 import ewm.location.model.Location;
@@ -72,6 +73,9 @@ public class EventServiceImp implements EventService {
 
     @Override
     public List<EventShortDto> getEvents(Long userId, Integer from, Integer size) {
+        if (size.equals(0)) {
+            throw new BadRequestException("параметр size не может быть равен 0");
+        }
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         List<Event> eventList = eventRepository.getFullEventsByParam(pageable);

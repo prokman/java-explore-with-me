@@ -1,26 +1,18 @@
 package ewm.comment.dto;
 
 import ewm.comment.model.Comment;
+import org.mapstruct.Context;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-import java.time.LocalDateTime;
+import java.time.Clock;
 
-public class CommentMapper {
-    public static CommentDto commentToDto(Comment comment) {
-        CommentDto commentDto = new CommentDto();
-        commentDto.setId(comment.getId());
-        commentDto.setText(comment.getText());
-        commentDto.setAuthor(comment.getAuthorId());
-        commentDto.setEvent(comment.getEventId());
-        commentDto.setCreated(comment.getCreated());
-        return commentDto;
-    }
+@Mapper(componentModel = "spring")
+public interface CommentMapper {
+    CommentDto commentToDto(Comment comment);
 
-    public static Comment newCommentDtoToComment(NewCommentDto request, Long eventId, Long authorId) {
-        Comment comment = new Comment();
-        comment.setText(request.getText());
-        comment.setCreated(LocalDateTime.now());
-        comment.setAuthorId(authorId);
-        comment.setEventId(eventId);
-        return comment;
-    }
+    @Mapping(target = "created", expression = "java(java.time.LocalDateTime.now(clock))")
+    @Mapping(target = "authorId", source = "authorId")
+    @Mapping(target = "eventId", source = "eventId")
+    Comment newCommentDtoToComment(NewCommentDto request, Long eventId, Long authorId, @Context Clock clock);
 }

@@ -6,11 +6,11 @@ import ewm.categories.dto.NewCategoryDto;
 import ewm.categories.model.Category;
 import ewm.categories.repository.CatRepository;
 import ewm.event.repository.EventRepository;
+import ewm.exceptions.BadRequestException;
 import ewm.exceptions.ConditionNotMeetException;
 import ewm.exceptions.DuplicateDataException;
 import ewm.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.dao.DataIntegrityViolationException;
 
@@ -21,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -52,7 +51,6 @@ public class CatServiceImp implements CatService {
             return CategoryMapper.categoryToDto(catRepository.findById(catId)
                     .orElseThrow(() -> new NotFoundException("Category with ID " + catId + " not found")));
         }
-        log.info("Before existsByName");
         if (catRepository.existsByName(catPatch.getName())) {
             throw new DuplicateDataException("Name is busy");
         }
@@ -95,6 +93,9 @@ public class CatServiceImp implements CatService {
 
     @Override
     public List<CategoryDto> getCategories(Integer from, Integer size) {
+        if (size.equals(0)) {
+            throw new BadRequestException("параметр size не может быть равен 0");
+        }
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         List<Category> categoryList = catRepository.getCatByParam(pageable);

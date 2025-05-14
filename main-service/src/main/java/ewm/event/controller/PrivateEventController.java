@@ -6,8 +6,8 @@ import ewm.requests.dto.RequestDto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,15 +16,14 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/users/{userId}/events")
 @RequiredArgsConstructor
-@Slf4j
 public class PrivateEventController {
     private final EventService eventService;
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<EventShortDto> getEvents(@PathVariable @NotNull @Positive Long userId,
-                                         @RequestParam(required = false, defaultValue = "0") Integer from,
-                                         @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                         @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                         @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
         return eventService.getEvents(userId, from, size);
     }
 

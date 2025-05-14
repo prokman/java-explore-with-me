@@ -6,8 +6,8 @@ import ewm.event.service.AdminEventService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/admin/events")
 @RequiredArgsConstructor
-@Slf4j
 public class AdminEventController {
     private final AdminEventService adminEventService;
 
@@ -29,8 +28,8 @@ public class AdminEventController {
                                              @RequestParam(required = false) List<Integer> categories,
                                              @RequestParam(required = false) String rangeStart,
                                              @RequestParam(required = false) String rangeEnd,
-                                             @RequestParam(required = false, defaultValue = "0") Integer from,
-                                             @RequestParam(required = false, defaultValue = "10") Integer size) {
+                                             @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                             @RequestParam(required = false, defaultValue = "10") @Positive Integer size) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime start = null;
         LocalDateTime end = null;

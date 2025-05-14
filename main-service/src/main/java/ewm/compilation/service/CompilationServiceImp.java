@@ -11,6 +11,7 @@ import ewm.event.dto.EventShortDto;
 import ewm.event.model.Event;
 import ewm.event.repository.EventRepository;
 import ewm.event.service.PublicEventService;
+import ewm.exceptions.BadRequestException;
 import ewm.exceptions.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -116,6 +117,9 @@ public class CompilationServiceImp implements CompilationService {
 
     @Override
     public List<CompilationDto> getCompilations(Boolean pinned, Integer from, Integer size) {
+        if (size.equals(0)) {
+            throw new BadRequestException("параметр size не может быть равен 0");
+        }
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size, Sort.by("id").ascending());
         Page<Compilation> page = compilationRepository.getFullCompilations(pageable, pinned);
