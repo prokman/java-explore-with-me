@@ -7,8 +7,8 @@ import ewm.exceptions.BadRequestException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import stat.StatsClient;
@@ -21,7 +21,6 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/events")
 @RequiredArgsConstructor
-@Slf4j
 public class PublicEventController {
     private final PublicEventService publicEventService;
     private final StatsClient statsClient = new StatsClient();
@@ -49,8 +48,8 @@ public class PublicEventController {
                                                        @RequestParam(required = false) String rangeEnd,
                                                        @RequestParam(required = false) Boolean onlyAvailable,
                                                        @RequestParam(required = false) String sort,
-                                                       @RequestParam(required = false, defaultValue = "0") Integer from,
-                                                       @RequestParam(required = false, defaultValue = "10") Integer size,
+                                                       @RequestParam(required = false, defaultValue = "0") @PositiveOrZero Integer from,
+                                                       @RequestParam(required = false, defaultValue = "10") @Positive Integer size,
                                                        HttpServletRequest httpServletRequest) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime start = null;

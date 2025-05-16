@@ -1,5 +1,6 @@
 package ewm.user.service;
 
+import ewm.exceptions.BadRequestException;
 import ewm.exceptions.DuplicateDataException;
 import ewm.user.dto.NewUserRequest;
 import ewm.user.dto.UserDto;
@@ -68,6 +69,9 @@ public class UserServiceImp implements UserService {
         }
         if (size == null) {
             size = 10;
+        }
+        if (size.equals(0)) {
+            throw new BadRequestException("параметр size не может быть равен 0");
         }
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
